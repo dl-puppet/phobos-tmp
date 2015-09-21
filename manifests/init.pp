@@ -4,39 +4,45 @@ class ntp
 (  
 
   ######### PACKAGES ########
-  $package_manage         = $ntp::params::package_manage,
-  $package_name           = $ntp::params::package_name,
-  $package_ensure         = $ntp::params::package_ensure,  
-  
+  $package_manage               = $ntp::params::package_manage,
+  $package_name                 = $ntp::params::package_name,
+  $package_ensure               = $ntp::params::package_ensure,    
+  $package_install_options      = $ntp::params::package_install_options,
+  $package_settings             = $ntp::params::package_settings,
+  $package_reinstall_on_refresh = $ntp::params::package_reinstall_on_refresh,
+  $package_responsefile         = $ntp::params::package_responsefile,
+  $package_source               = $ntp::params::package_source,
+  $package_uninstall_options    = $ntp::params::package_uninstall_options,
+    
+ 
   ######### SERVICES ########
-  $service_manage         = $ntp::params::service_manage,
-  $service_name           = $ntp::params::service_name, 
-  $service_ensure         = $ntp::params::service_ensure,            
-  $service_enable         = $ntp::params::service_enable,   
-  $service_hasstatus      = $ntp::params::service_hasstatus,
-  $service_hasrestart     = $ntp::params::service_hasrestart,
+  $service_manage               = $ntp::params::service_manage,
+  $service_name                 = $ntp::params::service_name, 
+  $service_ensure               = $ntp::params::service_ensure,            
+  $service_enable               = $ntp::params::service_enable,   
+  $service_hasstatus            = $ntp::params::service_hasstatus,
+  $service_hasrestart           = $ntp::params::service_hasrestart,
+
 
   ###### CONFIG_FILES ###### 
-  $file_name              = $ntp::params::file_name,    
-  $file_path              = $ntp::params::file_path,     
-  $file_ensure            = $ntp::params::file_ensure,      
-  $file_backup            = $ntp::params::file_backup,      
-  $file_content           = $ntp::params::file_content,          
-  $file_group             = $ntp::params::file_group,        
-  $file_mode              = $ntp::params::file_mode,        
-  $file_owner             = $ntp::params::file_owner,       
+  $file_name                    = $ntp::params::file_name,    
+  $file_path                    = $ntp::params::file_path,     
+  $file_ensure                  = $ntp::params::file_ensure,      
+  $file_backup                  = $ntp::params::file_backup,      
+  $file_content                 = $ntp::params::file_content,          
+  $file_group                   = $ntp::params::file_group,        
+  $file_mode                    = $ntp::params::file_mode,        
+  $file_owner                   = $ntp::params::file_owner,       
 
   ####### CONFIG_LOG #######  
-  #$log_manage             = $ntp::params::log_manage, 
-  #$log_name               = $ntp::params::log_name,
-  #$log_path               = $ntp::params::log_path,
-  #$log_ensure             = $ntp::params::log_ensure,
-  #$log_backup             = $ntp::params::log_backup,
-  #$log_owner              = $ntp::params::log_owner,
-  #$log_group              = $ntp::params::log_group,
-  #$log_mode               = $ntp::params::log_mode,
-
-  $servers                = $ntp::params::servers,
+  #$log_manage                  = $ntp::params::log_manage, 
+  #$log_name                    = $ntp::params::log_name,
+  #$log_path                    = $ntp::params::log_path,
+  #$log_ensure                  = $ntp::params::log_ensure,
+  #$log_backup                  = $ntp::params::log_backup,
+  #$log_owner                   = $ntp::params::log_owner,
+  #$log_group                   = $ntp::params::log_group,
+  #$log_mode                    = $ntp::params::log_mode,
 
 ) inherits ntp::params  
 

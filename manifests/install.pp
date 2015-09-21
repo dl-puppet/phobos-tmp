@@ -6,14 +6,13 @@ class ntp::install inherits ntp
 
     #Default Option Packages:
     Package {       
-    ensure                => $package_ensure, 
-    name                  => $package_name,         
-    #install_options      => $package_install_options,
-    #package_settings     => $package_settings,
-    #reinstall_on_refresh => $package_reinstall_on_refresh,
-    #responsefile         => $package_responsefile,
-    #source               => $package_source,
-    #uninstall_options    => $package_uninstall_options,
+    ensure               => $ntp::package_ensure,         
+    install_options      => $ntp::package_install_options,
+    package_settings     => $ntp::package_settings,
+    reinstall_on_refresh => $ntp::package_reinstall_on_refresh,
+    responsefile         => $ntp::package_responsefile,
+    source               => $ntp::package_source,
+    uninstall_options    => $ntp::package_uninstall_options,
     before => File['$ntp::file_name'] 
     }
         

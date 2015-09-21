@@ -2,36 +2,48 @@
 
 class ntp::params
 {
-  #case $::osfamily {
-  #  'Debian' : { $package_name = 'apache2' }
-  #  'RedHat' : { $package_name = 'httpd'}
-  #  default :  { fail ("OS $::operatingsystem not supported") }
-  #}
-  
-  #if $::osfamilly == 'Debian' {
-  #  $package_name = 'apache2'
-  #} elsif $::osfamilly == 'RedHat' {
-  #  $package_name = 'httpd'
-  #} else {
-  #  fail ("OS $::operatingsystem not supported")
-  #}
   
 	######### PACKAGES ######## ruby-shadow
-	$package_manage       	= true
-	# use: $lsbdistcodename or $osfamilly:
-	$default_package_name   = $::operatingsystem ? {
-	   '/RedHat|Fedora|CentOS/'  => 'ntp',
-     'AIX'     => 'ntp',
-  }
-	$package_ensure       	= 'present' 
+	$package_manage       	      = true
+				#case $::osfamily {
+			  #  'Debian' : { $package_name = 'apache2' }
+			  #  'RedHat' : { $package_name = 'httpd'}
+			  #  default :  { fail ("OS $::operatingsystem not supported") }
+			  #}
+			  
+			  #if $::osfamilly == 'Debian' {
+			  #  $package_name = 'apache2'
+			  #} elsif $::osfamilly == 'RedHat' {
+			  #  $package_name = 'httpd'
+			  #} else {
+			  #  fail ("OS $::operatingsystem not supported")
+			  #}
+			  
+				# use: $lsbdistcodename or $osfamilly:
+				$default_package_name   = $::operatingsystem ? {
+				   '/RedHat|Fedora|CentOS/'  => 'ntp',
+			     'AIX'     => 'ntp',
+			  }		  
+	$package_ensure       	      = 'present' 
+  $package_install_options      = 'undef'
+  $package_settings             = 'undef'
+  $package_reinstall_on_refresh = 'undef'
+  $package_responsefile         = 'undef'
+  $package_source               = 'undef'
+  $package_uninstall_options    = 'undef'  
+		  
 		  
 	######### SERVICES ########
 	$service_manage 		    = true
-	$default_service_name   = ["ntpd"]
+	$default_service_name   = $::operatingsystem ? {
+    '/RedHat|Fedora|CentOS/'  => 'ntpd',
+    'AIX'                     => 'ntpd',
+   }
 	$service_ensure         = 'running'            
 	$service_enable         = true
 	$service_hasstatus		  = true
 	$service_hasrestart 	  = true
+
 
 	###### CONFIG_FILES ###### 
 	$default_file_name      = ["ntp.conf"]
