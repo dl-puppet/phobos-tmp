@@ -1,6 +1,6 @@
 # définition des paramètres par défaut 
 
-class ntp::params
+class system::params
 {
   
 	######### PACKAGES ######## ruby-shadow
@@ -21,8 +21,8 @@ class ntp::params
 			  
 				# use: $lsbdistcodename or $osfamilly:
 				$default_package_name   = $::operatingsystem ? {
-				   '/RedHat|Fedora|CentOS/'  => 'ntp',
-			     'AIX'     => 'ntp',
+				   '/RedHat|Fedora|CentOS/'  => 'system',
+			     'AIX'     => 'system',
 			  }		  
 	$package_ensure       	      = 'present' 
   $package_install_options      = 'undef'
@@ -36,8 +36,8 @@ class ntp::params
 	######### SERVICES ########
 	$service_manage 		    = true
 	$default_service_name   = $::operatingsystem ? {
-    '/RedHat|Fedora|CentOS/'  => 'ntpd',
-    'AIX'                     => 'ntpd',
+    '/RedHat|Fedora|CentOS/'  => 'systemd',
+    'AIX'                     => 'systemd',
    }
 	$service_ensure         = 'running'            
 	$service_enable         = true
@@ -46,19 +46,19 @@ class ntp::params
 
 
 	###### CONFIG_FILES ###### 
-	$default_file_name      = ["ntp.conf"]
-	$default_file_path      = '/etc/ntp.conf'     
+	$default_file_name      = ["system.conf"]
+	$default_file_path      = '/etc/system.conf'     
 	$file_ensure            = 'file'   
 	$file_backup            = '.puppet-bak'   
-	$file_content           = 'ntp/ntp.conf.erb' 
+	$file_content           = 'system/system.conf.erb' 
 	$file_group             = '0' 
 	$file_mode              = '0644' 
 	$file_owner             = '0'   
 
 	####### CONFIG_LOG ####### 
 	#$log_manage 			= true
-  	#$default_log_name		= 'ntp.log'
-  	#$default_log_path		= '/var/log/ntp.log'
+  	#$default_log_name		= 'system.log'
+  	#$default_log_path		= '/var/log/system.log'
   	#$log_ensure				= 'file'
   	#$log_backup				= '.puppet-bak'
   	#$log_owner				=
@@ -78,19 +78,19 @@ class ntp::params
 
 	        		'Fedora': {
 	        			$servers  = [
-				            '0.fedora.pool.ntp.org',
-				            '1.fedora.pool.ntp.org',
-				            '2.fedora.pool.ntp.org',
-				            '3.fedora.pool.ntp.org',
+				            '0.fedora.pool.system.org',
+				            '1.fedora.pool.system.org',
+				            '2.fedora.pool.system.org',
+				            '3.fedora.pool.system.org',
 	          			]
 	        		}
 
 	        		default : {
 	        			$servers  = [
-				            '0.centos.pool.ntp.org',
-				            '1.centos.pool.ntp.org',
-				            '2.centos.pool.ntp.org',
-				            '3.centos.pool.ntp.org',
+				            '0.centos.pool.system.org',
+				            '1.centos.pool.system.org',
+				            '2.centos.pool.system.org',
+				            '3.centos.pool.system.org',
 	          			]
 
 	        		}
@@ -102,7 +102,7 @@ class ntp::params
 	  		 ####### CONFIG_AIX_SYSTEM #######
 	    	'AIX': {   
 		      	$package_name   = [ 'bos.net.tcp.client', ]
-		      	$service_name 	= 'xntpd'
+		      	$service_name 	= 'xsystemd'
 		      	$file_name 		= $default_file_name     
 				$file_path   	= $default_file_path  
 	  		}
@@ -110,14 +110,14 @@ class ntp::params
 	  		##### CONFIG_DEBIAN_SYSTEM ######
 	  		'Debian': {
 	 			$package_name 	= $default_package_name
-	 			$service_name 	= 'ntp'
+	 			$service_name 	= 'system'
 	 			$file_name 		= $default_file_name     
 				$file_path   	= $default_file_path  
 	 			$servers        = [
-	        		'0.debian.pool.ntp.org',
-	        		'1.debian.pool.ntp.org',
-	        		'2.debian.pool.ntp.org',
-	        		'3.debian.pool.ntp.org',
+	        		'0.debian.pool.system.org',
+	        		'1.debian.pool.system.org',
+	        		'2.debian.pool.system.org',
+	        		'3.debian.pool.system.org',
 	      		]
 	  		}
 	}

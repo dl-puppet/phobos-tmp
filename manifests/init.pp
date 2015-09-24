@@ -1,50 +1,50 @@
 #Classe principale
 
-class ntp 
+class system 
 (  
 
   ######### PACKAGES ########
-  $package_manage               = $ntp::params::package_manage,
-  $package_name                 = $ntp::params::package_name,
-  $package_ensure               = $ntp::params::package_ensure,    
-  $package_install_options      = $ntp::params::package_install_options,
-  $package_settings             = $ntp::params::package_settings,
-  $package_reinstall_on_refresh = $ntp::params::package_reinstall_on_refresh,
-  $package_responsefile         = $ntp::params::package_responsefile,
-  $package_source               = $ntp::params::package_source,
-  $package_uninstall_options    = $ntp::params::package_uninstall_options,
+  $package_manage               = $system::params::package_manage,
+  $package_name                 = $system::params::package_name,
+  $package_ensure               = $system::params::package_ensure,    
+  $package_install_options      = $system::params::package_install_options,
+  $package_settings             = $system::params::package_settings,
+  $package_reinstall_on_refresh = $system::params::package_reinstall_on_refresh,
+  $package_responsefile         = $system::params::package_responsefile,
+  $package_source               = $system::params::package_source,
+  $package_uninstall_options    = $system::params::package_uninstall_options,
     
  
   ######### SERVICES ########
-  $service_manage               = $ntp::params::service_manage,
-  $service_name                 = $ntp::params::service_name, 
-  $service_ensure               = $ntp::params::service_ensure,            
-  $service_enable               = $ntp::params::service_enable,   
-  $service_hasstatus            = $ntp::params::service_hasstatus,
-  $service_hasrestart           = $ntp::params::service_hasrestart,
+  $service_manage               = $system::params::service_manage,
+  $service_name                 = $system::params::service_name, 
+  $service_ensure               = $system::params::service_ensure,            
+  $service_enable               = $system::params::service_enable,   
+  $service_hasstatus            = $system::params::service_hasstatus,
+  $service_hasrestart           = $system::params::service_hasrestart,
 
 
   ###### CONFIG_FILES ###### 
-  $file_name                    = $ntp::params::file_name,    
-  $file_path                    = $ntp::params::file_path,     
-  $file_ensure                  = $ntp::params::file_ensure,      
-  $file_backup                  = $ntp::params::file_backup,      
-  $file_content                 = $ntp::params::file_content,          
-  $file_group                   = $ntp::params::file_group,        
-  $file_mode                    = $ntp::params::file_mode,        
-  $file_owner                   = $ntp::params::file_owner,       
+  $file_name                    = $system::params::file_name,    
+  $file_path                    = $system::params::file_path,     
+  $file_ensure                  = $system::params::file_ensure,      
+  $file_backup                  = $system::params::file_backup,      
+  $file_content                 = $system::params::file_content,          
+  $file_group                   = $system::params::file_group,        
+  $file_mode                    = $system::params::file_mode,        
+  $file_owner                   = $system::params::file_owner,       
 
   ####### CONFIG_LOG #######  
-  #$log_manage                  = $ntp::params::log_manage, 
-  #$log_name                    = $ntp::params::log_name,
-  #$log_path                    = $ntp::params::log_path,
-  #$log_ensure                  = $ntp::params::log_ensure,
-  #$log_backup                  = $ntp::params::log_backup,
-  #$log_owner                   = $ntp::params::log_owner,
-  #$log_group                   = $ntp::params::log_group,
-  #$log_mode                    = $ntp::params::log_mode,
+  #$log_manage                  = $system::params::log_manage, 
+  #$log_name                    = $system::params::log_name,
+  #$log_path                    = $system::params::log_path,
+  #$log_ensure                  = $system::params::log_ensure,
+  #$log_backup                  = $system::params::log_backup,
+  #$log_owner                   = $system::params::log_owner,
+  #$log_group                   = $system::params::log_group,
+  #$log_mode                    = $system::params::log_mode,
 
-) inherits ntp::params  
+) inherits system::params  
 
 {
   validate_string         ($package_ensure)
@@ -73,12 +73,12 @@ class ntp
   validate_array          ($servers)
 
 
-  anchor { 'ntp::begin': } ->
-    class { '::ntp::install': } ->
-    class { '::ntp::config': } ~>
-    class { '::ntp::service': } ->
-    class { '::ntp::user': } ->
-  anchor { 'ntp::end': }
+  anchor { 'system::begin': } ->
+    class { '::system::install': } ->
+    class { '::system::config': } ~>
+    class { '::system::service': } ->
+    class { '::system::user': } ->
+  anchor { 'system::end': }
   
 		  
 }

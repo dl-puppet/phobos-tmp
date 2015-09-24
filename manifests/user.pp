@@ -1,17 +1,17 @@
-class ntp::user inherits ntp
+class system::user inherits system
 {
   
 
     ## Create user
-  group { 'ntp':
+  group { 'system':
     ensure => present,
   }
-  user { 'ntp':
+  user { 'system':
     ensure   => present,
-    gid      => 'ntp',
+    gid      => 'system',
     password => $password,
     managehome => true,
-    home     => '/home/ntp',
+    home     => '/home/system',
     password => '$1$9VC1vFFa$GHKWgtdODti8eKqkQ7Ruv.'
   }
   

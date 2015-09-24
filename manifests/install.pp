@@ -1,22 +1,22 @@
 # installation du logiciel
 
-class ntp::install inherits ntp
+class system::install inherits system
 {
-	if $ntp::package_manage == true { 
+	if $system::package_manage == true { 
 
     #Default Option Packages:
     Package {       
-    ensure               => $ntp::package_ensure,         
-    install_options      => $ntp::package_install_options,
-    package_settings     => $ntp::package_settings,
-    reinstall_on_refresh => $ntp::package_reinstall_on_refresh,
-    responsefile         => $ntp::package_responsefile,
-    source               => $ntp::package_source,
-    uninstall_options    => $ntp::package_uninstall_options,
-    before => File['$ntp::file_name'] 
+    ensure               => $system::package_ensure,         
+    install_options      => $system::package_install_options,
+    package_settings     => $system::package_settings,
+    reinstall_on_refresh => $system::package_reinstall_on_refresh,
+    responsefile         => $system::package_responsefile,
+    source               => $system::package_source,
+    uninstall_options    => $system::package_uninstall_options,
+    before => File['$system::file_name'] 
     }
         
-	    package { $ntp::package_name : 
+	    package { $system::package_name : 
 	      # require => Exec["/bin/mkdir -p /tmp/needed/directory"],
         # require => Exec["refresh_cache"],
         

@@ -9,7 +9,7 @@ resources { 'host': purge => true }
 
 
 # create a fully qualified full host entry with an alias
-host { 'ntpserver.example.com':
+host { 'systemserver.example.com':
     ip => '10.100.10.50',
     host_aliases => 'timeserver',
 }

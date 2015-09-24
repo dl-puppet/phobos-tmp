@@ -1,23 +1,23 @@
 # Configuration du logiciel
 
-class ntp::config inherits ntp
+class system::config inherits system
 {
 
 	#config default file:
 	File {
-      ensure          => $ntp::file_ensure,
+      ensure          => $system::file_ensure,
       #replace => "no", # add a file if the file isn’t already present. ca arrête la gestion de son contenu par Puppet si le fichier existe. 
-      group           => $ntp::file_group,
-      mode            => $ntp::file_mode,
-      owner           => $ntp::file_owner,
-      backup          => $ntp::file_backup,
-      require         => Class['$ntp::package'],
-      notify          => Service['$ntp::service_name'], #Si le fichier change, notifier le service pour redemarrage
+      group           => $system::file_group,
+      mode            => $system::file_mode,
+      owner           => $system::file_owner,
+      backup          => $system::file_backup,
+      require         => Class['$system::package'],
+      notify          => Service['$system::service_name'], #Si le fichier change, notifier le service pour redemarrage
 	}
 
-			file { $ntp::file_name :
-		    path            => $ntp::file_path,
-				content 		    => template($ntp::file_content),   
+			file { $system::file_name :
+		    path            => $system::file_path,
+				content 		    => template($system::file_content),   
 			}
 	
 	

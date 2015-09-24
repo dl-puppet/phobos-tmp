@@ -1,15 +1,15 @@
 # Gestion des services/daemon du logiciel
 
-class ntp::service inherits ntp
+class system::service inherits system
 {
 
-    if $ntp::service_manage == true {
+    if $system::service_manage == true {
 
-        service { $ntp::service_name :
-            ensure      => $ntp::service_ensure,
-            enable      => $ntp::service_enable,
-            hasstatus   => $ntp::service_hasstatus,
-            hasrestart  => $ntp::service_hasrestart,
+        service { $system::service_name :
+            ensure      => $system::service_ensure,
+            enable      => $system::service_enable,
+            hasstatus   => $system::service_hasstatus,
+            hasrestart  => $system::service_hasrestart,
             require     => Package["openssh-server"],
         }
 
