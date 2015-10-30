@@ -1,29 +1,141 @@
-# ntp.conf: Managed by puppet.
-#
+<%= Ruby expression %> : Cette balise sera remplacée par la valeur de l'expression qu'il contient.
+<% Ruby code %> : Cette balise va exécuter le code qu'il contient, mais ne sera pas remplacé par une valeur. Utile pour la logique condition ou de boucle, la définition des variables, et la manipulation de données avant de l'imprimer.
+<%# comment %> : Commentaire.
+<%% ou %%> : Un littéral <% ou%>, respectivement.
+<%- : Idem que <% , mais supprime aucun espace de premier plan dans la sortie finale. Utile lorsque l'indentation des blocs de code pour plus de lisibilité.
+-%> : Idem %> , mais supprime le saut de ligne suivante dans le résultat final. Utile avec de nombreuses lignes de code non-impression dans une rangée, qui, autrement, apparaître comme un long tronçon de lignes vides.
+"-" : permet aux balises de supprimer les espaces et les sauts. ERB génère des sauts de ligne par défaut. Pour éviter cela, nous utilisons la balise de fermeture -%> au lieu de %> . 
+Puppet passe toutes les variables actuellement définies (y compris les facts) aux modèles quand ils sont évalués:
+Affiche all variable defini:
+		<% scope.to_hash.keys.each do |k| -%>
+		<%= k %>
+		<% end -%>
+		
+-Toutes les variables visibles dans le champ d'application actuel sont disponibles  (Les facters): @fqdn, @memoryfree, @operatingsystem , etc.
+		<%# configuration effectuer par Puppet Hiera %>					#Un commentaire
+		<% if @fqdn %>
+		server <%= @fqdn %>
+		<% end %>
 
-# Permit time synchronization with our time source, but do not
-# permit the source to query or modify the service on this system.
-restrict default kod nomodify notrap nopeer noquery
-restrict -6 default kod nomodify notrap nopeer noquery
-restrict 127.0.0.1
-restrict -6 ::1
+Puppet passe un objet nommé "scope" au modèle. Elle contient toutes les variables actuellement définies, ainsi que d'autres données ( y compris les fonctions ), et fournit quelques méthodes pour y accéder. 
+Vous pouvez utiliser de l'objet de champ "lookupvar" la méthode pour trouver une variable, dans tous les contextes. 
+Vous pouvez accéder aux variables dans d'autres champs d'application avec le scope.lookupvar méthode:
+		<%= scope.lookupvar('apache::user') %>
+		<%= scope.lookupvar('common::config::myvar') %>
+		<%= scope.lookupvar('service_name') %>
 
 
-# Set up servers for ntpd with next options:
-# server - IP address or DNS name of upstream NTP server
-# iburst - allow send sync packages faster if upstream unavailable
-# prefer - select preferrable server
-# minpoll - set minimal update frequency
-# maxpoll - set maximal update frequency
-	
-<%# configuration effectue par Puppet Hiera %>	
-server1  	<%= scope['servers'] %>
-server2 		<%= @servers %>
-server3	 <%= scope.lookupvar('::server') %>
+Puppet 3 introduit une syntaxe plus facile: vous pouvez utiliser l'opérateur de crochets ( [] ) sur l'objet de champ comme si elle était une table de hachage.
+		<%= scope['::domain'] %>
+		test4 <%= scope['service_name'] %>
 
 
-# Driftfile.
-driftfile /var/lib/ntp/drift
+##########################################
+
+Concatenation de plusieurs modeles:
+		template('my_module/template1.erb','my_module/template2.erb')
+
+Iteration dans un tableau :
+If the variable you are accessing is an array, you can iterate over it in a loop.
+		$values = [val1, val2, otherval]
+		<% @values.each do |val| -%>
+		Affiche <%= val %>
+		<% end -%>
+
+This would produce:
+Some stuff with val1
+Some stuff with val2
+Some stuff with otherval
+
+La construction suivante est un moyen rapide et facile à mettre conditionnellement contenu dans un fichier:
+		<% if @broadcast != "NONE" %>    
+		broadcast <%= @broadcast %> <% end %>
+
+
+###########################################
+Puppet passe les variables supplémentaires suivantes à un modèle:
+
+classes : un tableau de toutes les classes qui ont été déclarés jusqu'à présent
+		<% classes.each do |klass| -%>
+		The class <%= klass %> is defined
+		<% end -%>
+
+tags : un tableau de toutes les balises appliquées au conteneur actuel
+		<% tags.each do |tag| -%>
+		The tag <%= tag %> is part of the current scope
+		<% end -%>
+
+all_tags : un tableau de toutes les balises dans une utilisation partout dans le catalogue
+		<% all_tags.each do |tag| -%>
+		The tag <%= tag %> is defined
+		<% end -%>
+
+
+###########################################
+Les fonctions de Puppet peuvent être utilisés à l'intérieur des modèles, mais leur utilisation est légèrement différente de leur utilisation dans les manifestes:
+voir fonction puppet: https://docs.puppetlabs.com/references/stable/function.html
+Toutes les fonctions sont des méthodes sur le scope objet. Les arguments de la fonction doivent être fournis comme un tableau, même si il n'y a qu'un seul argument.
+Vous devez préfixer "function_" au début du nom de la fonction.
+
+		<%= scope.function_template(["my_module/template2.erb"]) %>
+
+Pour vous connecter en utilisant un avertissement propre au système de journalisation de Puppet, de sorte qu'il apparaît dans les rapports:
+		<%= scope.function_warning(["Template was missing some data; this config file may be malformed."]) %>
+
+
+###########################################
+ERB permet de vérifier la syntaxe des fichiers : 
+		erb -P -x -T '-' mytemplate.erb | ruby -c
+
+
+###########################################
+
+		<% if @tinker == true and (@panic or @stepout) -%>
+		Affichage du texte
+			<% if @panic -%> 
+			panic <%= @panic %>
+			<% end %>
+				<% if @stepout -%> 
+				stepout <%= @stepout %>
+				<% end %>
+		<% end -%>
+
+		<% if @disable_monitor == true -%>
+		disable monitor
+		<% end -%>
+			
+		<% if @restrict != [] -%>
+		Affichage du texte
+			<% @restrict.flatten.each do |restrict| -%>
+			restrict <%= restrict %>
+			<% end -%>
+		<% end -%>
+
+		<% @interfaces.flatten.each do |interface| -%>
+		interface listen <%= interface %>
+		<% end -%>
+
+		<% [@servers].flatten.each do |server| -%>
+			server <%= server %>
+			<% if @preferred_servers.include?(server) -%> prefer<% end %>
+		<% end -%>
+
+		<% unless @logfile.nil? -%>
+		logfile <%= @logfile %>
+		<% end -%>
+
+		<% unless @peers.empty? -%>
+			<% [@peers].flatten.each do |peer| -%>
+			peer <%= peer %>
+			<% end -%>
+		<% end -%>
+
+
+		<% unless @keys_trusted.empty? -%>
+		trustedkey <%= @keys_trusted.join(' ') %>
+		<% end -%>
+
+		
 
 
 
